@@ -1,0 +1,245 @@
+<div class="clients-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="page-title">Gestión de Clientes</h1>
+      <p class="page-subtitle">Administra la información de tus clientes</p>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-primary" (click)="showAddForm()">
+        <span class="material-icons">add</span>
+        Nuevo Cliente
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="search-section">
+    <div class="search-box">
+      <span class="material-icons">search</span>
+      <input 
+        type="text" 
+        placeholder="Buscar clientes..." 
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        class="search-input"
+      >
+    </div>
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number">{{ totalClients }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ activeClients }}</span>
+        <span class="stat-label">Activos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clients Table -->
+  <div class="table-container">
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Contacto</th>
+          <th>Dirección</th>
+          <th>Estado</th>
+          <th>Fecha Registro</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (client of filteredClients; track client.id) {
+          <tr>
+            <td>
+              <div class="client-info">
+                <div class="client-avatar">
+                  {{ client.name.charAt(0).toUpperCase() }}
+                </div>
+                <div class="client-details">
+                  <div class="client-name">{{ client.name }}</div>
+                  <div class="client-id">ID: {{ client.id }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="contact-info">
+                <div class="contact-item">
+                  <span class="material-icons">email</span>
+                  {{ client.email }}
+                </div>
+                <div class="contact-item">
+                  <span class="material-icons">phone</span>
+                  {{ client.phone }}
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="address-info">
+                <span class="material-icons">location_on</span>
+                {{ client.address }}
+              </div>
+            </td>
+            <td>
+              <span 
+                class="status-badge" 
+                [class.active]="client.status === 'active'"
+                [class.inactive]="client.status === 'inactive'"
+              >
+                {{ client.status === 'active' ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <div class="date-info">
+                {{ client.createdAt | date:'dd/MM/yyyy' }}
+              </div>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button 
+                  class="btn-icon edit" 
+                  (click)="showEditForm(client)"
+                  title="Editar"
+                >
+                  <span class="material-icons">edit</span>
+                </button>
+                <button 
+                  class="btn-icon toggle" 
+                  [class.active]="client.status === 'active'"
+                  (click)="toggleClientStatus(client)"
+                  [title]="client.status === 'active' ? 'Desactivar' : 'Activar'"
+                >
+                  <span class="material-icons">
+                    {{ client.status === 'active' ? 'visibility_off' : 'visibility' }}
+                  </span>
+                </button>
+                <button 
+                  class="btn-icon delete" 
+                  (click)="deleteClient(client)"
+                  title="Eliminar"
+                >
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (filteredClients.length === 0) {
+      <div class="empty-state">
+        <span class="material-icons">people_outline</span>
+        <h3>No se encontraron clientes</h3>
+        <p>Intenta ajustar los filtros de búsqueda o agrega un nuevo cliente.</p>
+      </div>
+    }
+  </div>
+
+  <!-- Client Form Modal -->
+  @if (showForm) {
+    <div class="modal-overlay" (click)="hideForm()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ isEditing ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+          <button class="close-btn" (click)="hideForm()">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+
+        <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="client-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Nombre Completo *</label>
+              <input 
+                type="text" 
+                id="name"
+                formControlName="name" 
+                placeholder="Ingresa el nombre completo"
+                [class.error]="isFieldInvalid('name')"
+              >
+              @if (isFieldInvalid('name')) {
+                <div class="error-message">
+                  El nombre es requerido y debe tener al menos 2 caracteres
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input 
+                type="email" 
+                id="email"
+                formControlName="email" 
+                placeholder="correo@ejemplo.com"
+                [class.error]="isFieldInvalid('email')"
+              >
+              @if (isFieldInvalid('email')) {
+                <div class="error-message">
+                  Ingresa un email válido
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="phone">Teléfono *</label>
+              <input 
+                type="tel" 
+                id="phone"
+                formControlName="phone" 
+                placeholder="+57 300 123 4567"
+                [class.error]="isFieldInvalid('phone')"
+              >
+              @if (isFieldInvalid('phone')) {
+                <div class="error-message">
+                  Ingresa un número de teléfono válido
+                </div>
+              }
+            </div>
+
+            <div class="form-group">
+              <label for="status">Estado *</label>
+              <select id="status" formControlName="status">
+                <option value="active">Activo</option>
+                <option value="inactive">Inactivo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Dirección *</label>
+            <textarea 
+              id="address"
+              formControlName="address" 
+              placeholder="Ingresa la dirección completa"
+              rows="3"
+              [class.error]="isFieldInvalid('address')"
+            ></textarea>
+            @if (isFieldInvalid('address')) {
+              <div class="error-message">
+                La dirección es requerida y debe tener al menos 5 caracteres
+              </div>
+            }
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="hideForm()">
+              Cancelar
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              [disabled]="clientForm.invalid"
+            >
+              {{ isEditing ? 'Actualizar' : 'Crear' }} Cliente
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

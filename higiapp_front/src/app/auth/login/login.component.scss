@@ -1,0 +1,501 @@
+// Reset y configuración base
+* {
+  box-sizing: border-box;
+}
+
+// Asegurar que todos los elementos del formulario respeten el ancho
+input, button, form, .form-group {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+// Variables - Paleta de colores Higiapp
+$primary-color: #22c55e; // Verde vibrante de Higiapp
+$primary-hover: #16a34a; // Verde más oscuro para hover
+$secondary-color: #f97316; // Naranja energético
+$secondary-hover: #ea580c; // Naranja más oscuro para hover
+$accent-color: #3b82f6; // Azul para elementos secundarios
+$error-color: #dc2626;
+$success-color: #16a34a;
+$warning-color: #f59e0b;
+
+// Colores de fondo
+$bg-primary: #fdfcfb; // Beige suave del banner
+$bg-secondary: #ffffff; // Blanco puro
+$bg-gradient-start: #e2e2e2; // Verde para gradientes
+$bg-gradient-end: #48da7d; // Verde más oscuro
+
+// Grises adaptados al tema
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+$white: #ffffff;
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+$border-radius: 8px;
+$border-radius-lg: 12px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($property: all, $duration: 0.2s, $timing: ease-in-out) {
+  transition: $property $duration $timing;
+}
+
+@mixin focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+// Main container
+.login-container {
+  min-height: 100vh;
+  @include flex-center;
+  background: linear-gradient(135deg, $bg-gradient-start 0%, $bg-gradient-end 100%);
+  padding: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
+  
+  // Efecto de partículas sutiles
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+// Login card
+.login-card {
+  background: $bg-primary;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(34, 197, 94, 0.1);
+  box-sizing: border-box;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $primary-color, $secondary-color);
+  }
+  
+  // Efecto de brillo sutil
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+}
+
+// Header
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+
+  h2 {
+    color: $gray-900;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+    background: linear-gradient(135deg, $primary-color, $secondary-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    color: $gray-600;
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+// Form
+.login-form {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  
+  .form-group {
+    margin-bottom: 1.75rem;
+    width: 100%;
+    box-sizing: border-box;
+
+    label {
+      display: block;
+      color: $gray-700;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      width: 100%;
+      max-width: 100%;
+      padding: 1rem 1.25rem;
+      border: 2px solid $gray-200;
+      border-radius: $border-radius;
+      font-size: 1rem;
+      @include transition(all, 0.3s);
+      background: $white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      box-sizing: border-box;
+      margin: 0;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1), 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+      }
+
+      &::placeholder {
+        color: $gray-400;
+        font-weight: 400;
+      }
+
+      &.error {
+        border-color: $error-color;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+        }
+      }
+    }
+
+    .error-message {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: $error-color;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+
+      &::before {
+        content: '⚠';
+        font-size: 0.875rem;
+      }
+
+      &.general-error {
+        background: rgba(220, 38, 38, 0.05);
+        padding: 0.75rem;
+        border-radius: $border-radius;
+        border-left: 3px solid $error-color;
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      color: $gray-700;
+      @include transition(color);
+
+      &:hover {
+        color: $gray-900;
+      }
+
+      input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+        accent-color: $primary-color;
+      }
+    }
+
+    .forgot-password {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 500;
+      @include transition(color);
+
+      &:hover {
+        color: $primary-hover;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .login-button {
+    width: 100%;
+    max-width: 100%;
+    background: linear-gradient(135deg, $primary-color, $primary-hover);
+    color: $white;
+    border: none;
+    border-radius: $border-radius;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    @include transition(all, 0.3s);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    box-sizing: border-box;
+    margin: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      @include transition(left, 0.5s);
+    }
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, $primary-hover, #0d4a1a);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+      
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      background: $gray-300;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    &.loading {
+      background: linear-gradient(135deg, $primary-hover, #1a5a2a);
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid transparent;
+      border-top: 2px solid $white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+// Footer
+.login-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(34, 197, 94, 0.2);
+  position: relative;
+  z-index: 1;
+
+  p {
+    color: $gray-600;
+    font-size: 0.9rem;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .signup-link {
+    color: $secondary-color;
+    text-decoration: none;
+    font-weight: 600;
+    @include transition(all, 0.3s);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: $secondary-color;
+      @include transition(width, 0.3s);
+    }
+
+    &:hover {
+      color: $secondary-hover;
+      
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.login-card {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.login-container {
+  animation: fadeIn 0.8s ease-out;
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .login-container {
+    padding: 0.5rem;
+  }
+
+  .login-card {
+    padding: 1.5rem;
+  }
+
+  .login-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-options {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
+
+// Dark mode support (optional)
+@media (prefers-color-scheme: dark) {
+  .login-container {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+
+  .login-card {
+    background: #1e293b;
+    color: $white;
+    border-color: rgba(34, 197, 94, 0.3);
+
+    .login-header h2 {
+      background: linear-gradient(135deg, $primary-color, $secondary-color);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .login-header p {
+      color: $gray-300;
+    }
+
+    .form-group {
+      label {
+        color: $gray-200;
+      }
+
+      input {
+        background: #334155;
+        border-color: #475569;
+        color: $white;
+
+        &::placeholder {
+          color: $gray-400;
+        }
+
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+      }
+    }
+
+    .form-options {
+      .remember-me {
+        color: $gray-200;
+      }
+    }
+
+    .login-footer {
+      border-color: rgba(34, 197, 94, 0.3);
+
+      p {
+        color: $gray-300;
+      }
+    }
+  }
+}

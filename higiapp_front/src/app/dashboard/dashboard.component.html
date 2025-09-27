@@ -1,0 +1,100 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <!-- Header -->
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">H</div>
+        <span class="logo-text" *ngIf="!isSidebarCollapsed">HIGIAPP</span>
+      </div>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <span class="material-icons">{{ isSidebarCollapsed ? 'menu' : 'close' }}</span>
+      </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+      @for (module of menuItems; track module.id) {
+        <div class="nav-section">
+          <button 
+            class="nav-module" 
+            [class.active]="activeModule === module.id"
+            (click)="toggleModule(module.id)"
+          >
+            <span class="material-icons">{{ module.icon }}</span>
+            <span class="nav-label" *ngIf="!isSidebarCollapsed">{{ module.label }}</span>
+            <span class="material-icons expand-icon" *ngIf="!isSidebarCollapsed">
+              {{ activeModule === module.id ? 'expand_less' : 'expand_more' }}
+            </span>
+          </button>
+
+          <!-- Submenu -->
+          @if (module.children && activeModule === module.id && !isSidebarCollapsed) {
+            <div class="nav-submenu">
+              @for (item of module.children; track item.id) {
+                <button 
+                  class="nav-item" 
+                  [class.active]="activeItem === item.id"
+                  (click)="selectItem(item)"
+                >
+                  <span class="material-icons">{{ item.icon }}</span>
+                  <span class="nav-label">{{ item.label }}</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <button class="nav-item logout-btn" (click)="logout()">
+        <span class="material-icons">logout</span>
+        <span class="nav-label" *ngIf="!isSidebarCollapsed">Cerrar Sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Bienvenido al sistema de gestión</p>
+      </div>
+      <div class="top-bar-right">
+        <div class="user-info">
+          <div class="user-avatar">
+            <span class="material-icons">person</span>
+          </div>
+          <div class="user-details">
+            <span class="user-name">Usuario</span>
+            <span class="user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <div class="welcome-card">
+        <div class="welcome-content">
+          <h2>¡Bienvenido a Higiapp!</h2>
+          <p>Selecciona un módulo del menú lateral para comenzar a gestionar tu sistema.</p>
+          <div class="quick-actions">
+            <button class="action-btn primary" (click)="navigateToClients()">
+              <span class="material-icons">people</span>
+              Gestionar Clientes
+            </button>
+            <button class="action-btn secondary" (click)="navigateToProcess()">
+              <span class="material-icons">assignment</span>
+              Ver Procesos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
